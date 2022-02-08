@@ -1,20 +1,24 @@
-import { FaSearch } from "react-icons/fa";
+import { useState } from "react";
+import Select from "react-select";
+import { Input } from "./elements/Input";
 
 export const Nav = () => {
+  const options = [
+    { value: "africa", label: "Africa" },
+    { value: "america", label: "America" },
+    { value: "asia", label: "Asia" },
+    { value: "europe", label: "Europe" },
+    { value: "oceania", label: "Oceania" },
+  ];
+
   return (
     <nav>
-      <div className="search">
-        <FaSearch className="img" />
-        <input placeholder="Search for a country..." />
-      </div>
-      <select id="filterByRegion">
-        <option value="filterByRegion">Filter by Region</option>
-        <option value="africa">Africa</option>
-        <option value="America">America</option>
-        <option value="Asia">Asia</option>
-        <option value="Europe">Europe</option>
-        <option value="Oceania">Oceania</option>
-      </select>
+      <Input />
+      <Select
+        className="select"
+        placeholder="Filter by Region"
+        options={options}
+      />
     </nav>
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Nav } from "./Nav";
 
 export const Main = () => {
   type CountryData = {
@@ -31,9 +32,10 @@ export const Main = () => {
   console.log(country[0]);
   return (
     <main>
+      <Nav />
       <ul>
         {country.map((country) => (
-          <div className="card">
+          <div className="card" key={country.name.common}>
             <img alt="flag" src={country.flags.png} className="flag" />
             <div className="card_content">
               <h3>{country.name.common}</h3>
