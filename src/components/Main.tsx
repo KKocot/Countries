@@ -1,42 +1,50 @@
-import { useEffect, useState } from "react";
-import { Nav } from "./Nav";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useCountryContext } from "./elements/context";
+import { Filter } from "./Filter";
 
 export const Main = () => {
-  type CountryData = {
-    flags: {
-      png: string;
-    };
-    name: {
-      common: string;
-    };
-    region: string;
-    capital: string;
-    population: number;
-  };
-  const [country, setCountry] = useState<CountryData[]>();
-  const [fetchSite, setfetchSite] = useState(
-    `https://restcountries.com/v3.1/all`
-  );
+  const [filters, setFilters] = useState({ search: "", region: "" });
+  const countres = useCountryContext();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(fetchSite);
-      setCountry(await res.json());
-    };
-    fetchData();
-  }, [fetchSite]);
-  if (!country) {
+  if (!countres) {
     return <>Loading</>;
   }
+  const filtredCountries = countres.filter((value) => {
+    const searchWord = filters.search.toLowerCase();
+    const countryName = value.name.common.toLowerCase();
+    if (
+      countryName.includes(searchWord) &&
+      (!filters.region || filters.region === value.region)
+    ) {
+      return true;
+    }
+    return false;
+  });
 
-  console.log(country[0]);
+  console.log(countres);
   return (
     <main>
-      <Nav />
+      <Filter
+        onRegionChange={(value) => {
+          setFilters((prevFilters) => ({
+            ...prevFilters,
+            region: value,
+          }));
+        }}
+        onSearchChange={(value) => {
+          setFilters((prevFilters) => ({
+            ...prevFilters,
+            search: value,
+          }));
+        }}
+      />
       <ul>
-        {country.map((country) => (
+        {filtredCountries.map((country) => (
           <div className="card" key={country.name.common}>
-            <img alt="flag" src={country.flags.png} className="flag" />
+            <Link to={`/CountryPageDetails/${country.name.common}`}>
+              <img alt="flag" src={country.flags.png} className="flag" />
+            </Link>
             <div className="card_content">
               <h3>{country.name.common}</h3>
               <div>
