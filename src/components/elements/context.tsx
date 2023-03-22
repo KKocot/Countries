@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type CountryData = {
+interface CountryData {
   flags: {
     png: string;
   };
@@ -25,7 +25,7 @@ type CountryData = {
   };
   borders;
   cca3: string;
-};
+}
 
 export const CountryContext = createContext<CountryData[] | null>(null);
 
@@ -35,8 +35,12 @@ export const CountryProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://restcountries.com/v3.1/all`);
-      setCountry(await res.json());
+      try {
+        const res = await fetch(`https://restcountries.com/v3.1/all`);
+        setCountry(await res.json());
+      } catch (e) {
+        alert("error");
+      }
     };
     fetchData();
   }, []);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useCountryContext } from "./elements/context";
 import { Filter } from "./Filter";
@@ -7,22 +7,24 @@ export const Main = () => {
   const [filters, setFilters] = useState({ search: "", region: "" });
   const countres = useCountryContext();
 
+  const filtredCountries = useMemo(
+    () =>
+      countres?.filter((value) => {
+        const searchWord = filters.search.toLowerCase();
+        const countryName = value.name.common.toLowerCase();
+        if (
+          countryName.includes(searchWord) &&
+          (!filters.region || filters.region === value.region)
+        ) {
+          return true;
+        }
+        return false;
+      }),
+    [countres, filters]
+  );
   if (!countres) {
     return <>Loading</>;
   }
-  const filtredCountries = countres.filter((value) => {
-    const searchWord = filters.search.toLowerCase();
-    const countryName = value.name.common.toLowerCase();
-    if (
-      countryName.includes(searchWord) &&
-      (!filters.region || filters.region === value.region)
-    ) {
-      return true;
-    }
-    return false;
-  });
-
-  console.log(countres);
   return (
     <main>
       <Filter

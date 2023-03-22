@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import { FaRegMoon } from "react-icons/fa";
 
 export const Header = () => {
-  const [darkTheme, setDarkTheme] = useState(
-    localStorage.getItem("theme") === "dark-theme" ? true : false
-  );
+  const [darkTheme, setDarkTheme] = useState<boolean>();
 
   useEffect(() => {
-    localStorage.getItem("theme") === "dark-theme"
-      ? document.body.classList.add("dark-theme")
-      : document.body.classList.remove("dark-theme");
+    const storage = localStorage.getItem("theme");
+    if (storage) {
+      if (storage === "dark-theme") {
+        document.body.classList.add("dark-theme");
+      } else {
+        document.body.classList.remove("dark-theme");
+      }
+    } else if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      document.body.classList.add("dark-theme");
+    }
   }, [darkTheme]);
 
   const handleTheme = () => {
