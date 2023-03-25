@@ -6,18 +6,20 @@ export const Header = () => {
 
   useEffect(() => {
     const storage = localStorage.getItem("theme");
+    const remove = () => document.body.classList.remove("dark-theme");
+    const add = () => document.body.classList.add("dark-theme");
     if (storage) {
       if (storage === "dark-theme") {
-        document.body.classList.add("dark-theme");
+        add();
       } else {
-        document.body.classList.remove("dark-theme");
+        remove();
       }
     } else if (
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches
     ) {
-      document.body.classList.add("dark-theme");
-    }
+      add();
+    } else add();
   }, [darkTheme]);
 
   const handleTheme = () => {

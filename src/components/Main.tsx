@@ -6,7 +6,6 @@ import { Filter } from "./Filter";
 export const Main = () => {
   const [filters, setFilters] = useState({ search: "", region: "" });
   const countres = useCountryContext();
-
   const filtredCountries = useMemo(
     () =>
       countres?.filter((value) => {
@@ -20,11 +19,13 @@ export const Main = () => {
         }
         return false;
       }),
-    [countres, filters]
+    [JSON.stringify(countres), filters.region, filters.search]
   );
+
   if (!countres) {
     return <>Loading</>;
   }
+
   return (
     <main>
       <Filter

@@ -32,6 +32,7 @@ export const CountryContext = createContext<CountryData[] | null>(null);
 export const useCountryContext = () => useContext(CountryContext);
 export const CountryProvider = ({ children }) => {
   const [country, setCountry] = useState<CountryData[]>();
+  const [_, setError] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,9 +40,12 @@ export const CountryProvider = ({ children }) => {
         const res = await fetch(`https://restcountries.com/v3.1/all`);
         setCountry(await res.json());
       } catch (e) {
-        alert("error");
+        setError(() => {
+          throw e;
+        });
       }
     };
+
     fetchData();
   }, []);
 
